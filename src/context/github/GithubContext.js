@@ -19,8 +19,10 @@ export const GithubProvider = ({ children }) => {
       q: text,
     });
 
-    const response = await fetch(`${GITHUB_URL}/search/users/?${params}`);
+    const response = await fetch(`https://api.github.com/search/users?${params}`);
     const { items } = await response.json();
+
+    console.log(items)
 
     dispatch({
       type: 'GET_USERS',
@@ -28,11 +30,18 @@ export const GithubProvider = ({ children }) => {
     });
   }
 
+  const handleClear = () => {
+    dispatch({
+      type: 'CLEAR_SEARCH_RESULTS',
+    });
+  }
+  
   const setLoading = () => {
     dispatch({
       type: 'SET_LOADING',
     });
   };
+
 
   return (
     <GithubContext.Provider
@@ -40,6 +49,7 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         loading: state.loading,
         searchUsers,
+        handleClear
       }}
     >
       {children}
